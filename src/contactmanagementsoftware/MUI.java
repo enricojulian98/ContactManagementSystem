@@ -15,12 +15,13 @@ import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 /**
  *
  * @author ritz619
  */
-public class MUI extends javax.swing.JFrame {
+public class MUI extends javax.swing.JFrame implements DeleteBt, PerformAction{
 
     /**
      * Creates new form MUI
@@ -34,6 +35,64 @@ public class MUI extends javax.swing.JFrame {
     private boolean dflag;
     private String op;
     private String str;
+    private boolean btClicked; 
+	    
+//    0bserver Design Pattern  
+    
+    public List<eventLisner> listListners; 
+    
+	@Override
+	public void add(eventLisner listner) {
+		listListners.add(listner);
+		
+	}
+
+	@Override
+	public void remove(eventLisner listner) {
+		listListners.remove(listner);
+		
+	}
+
+	@Override
+	public void Notifyall() {
+		for(eventLisner listner :listListners) {
+			listner.update("button is clicked so do the action"); 
+		}
+		
+	}
+	
+	public void btStatusChanged(){
+		Notifyall(); 
+	}
+	
+	public boolean SetbtStatus(boolean btClicked) {
+		btStatusChanged();
+		return btClicked; 
+	}
+	@Override
+	public void perfome() {
+//      applying observer DP 
+		
+       jButton2.setText("Delete");
+       if (btClicked) {
+    	   
+           jButton2.addActionListener(new java.awt.event.ActionListener() {
+               public void actionPerformed(java.awt.event.ActionEvent evt) {
+                   jButton2ActionPerformed(evt);
+               }
+           });  
+       }
+       else {
+    	   System.out.println("button is not clicked so there is no action taken");
+       }
+    	   
+
+		
+	}
+
+	
+	
+	
     
     public void setMg(MUI mg) {
         this.mg = mg;
@@ -269,12 +328,12 @@ public class MUI extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Delete");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+//         jButton2.setText("Delete");
+//         jButton2.addActionListener(new java.awt.event.ActionListener() {
+//             public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                 jButton2ActionPerformed(evt);
+//             }
+//         });
 
         jButton3.setText("Search");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
