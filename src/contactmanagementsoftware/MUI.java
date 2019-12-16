@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
@@ -126,7 +127,7 @@ public class MUI extends javax.swing.JFrame {
                 jScrollPane4.setVisible(true);
                 jScrollPane5.setVisible(false);
                 break;
-            case 2:
+            case 2:  
                 jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, op + " Professional Friends Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DialogInput", 1, 16))); 
                 jLabel7.setText("Common Interests: ");
                 jLabel7.setVisible(true);
@@ -164,14 +165,25 @@ public class MUI extends javax.swing.JFrame {
             jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Display Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DialogInput", 1, 16)));
         }
     }
+
+  
+    //singletone implementation
+    private static MUI Instance;
+    public static MUI getInstance() {
+    	if(Instance==null) {
+    		Instance=new MUI();
+    	}
+    	return Instance;
+    }
     
-    public MUI() {
+    private MUI() {
         initComponents();
         String[] columnNames = {"S.No", "Name", "Mobile"," Email"};
         DefaultTableModel model = new DefaultTableModel(null, columnNames);
         jXTable1.setModel(model);
         setUpTableData();
     }
+    
 
     public final void setUpTableData() {
         DefaultTableModel tableModel = (DefaultTableModel) jXTable1.getModel();
@@ -879,7 +891,7 @@ public class MUI extends javax.swing.JFrame {
         if(!Email.contains("@")){
             JOptionPane.showMessageDialog(mg, "Enter a valid email");
             return;
-        }
+        }// factory pattern goes here
         String One,Two,Three;
         switch(x){
             case 0: //perF
@@ -903,7 +915,7 @@ public class MUI extends javax.swing.JFrame {
                 }
                 PersonalFriends perF;
                 if(flag)
-                    perF = new PersonalFriends();
+                    perF =(PersonalFriends) Factory(0);// new PersonalFriends();
                 else
                     perF = (PersonalFriends)a.get(x).get(num);
                 perF.setName(Name);
@@ -935,7 +947,7 @@ public class MUI extends javax.swing.JFrame {
                 }
                 Relatives rel;
                 if(flag)
-                    rel = new Relatives();
+                    rel =  (Relatives)Factory(1);
                 else
                     rel = (Relatives)a.get(x).get(num);
                 rel.setName(Name);
@@ -954,7 +966,7 @@ public class MUI extends javax.swing.JFrame {
                 }
                 ProfessionalFriends proF;
                 if(flag)
-                    proF = new ProfessionalFriends();
+                    proF = (ProfessionalFriends)Factory(1);
                 else
                     proF = (ProfessionalFriends)a.get(x).get(num);
                 proF.setName(Name);
@@ -1002,6 +1014,20 @@ public class MUI extends javax.swing.JFrame {
         mg.setUpTableData();
     }//GEN-LAST:event_jButton10ActionPerformed
 
+    // factory pattern implementation
+    private Acquaintances Factory(int type) {
+    	switch(type) {
+    	case 0:
+    		return new PersonalFriends();
+		case 1:
+    		return new Relatives();
+		  case 2:
+				return new ProfessionalFriends();
+			}
+	
+    	return null;
+    }
+    
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         jPanel1.setVisible(true);
         jPanel3.setVisible(false);
